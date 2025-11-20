@@ -5,12 +5,7 @@ import perfil from './assets/perfil.jpg';
 function App() {
   return (
     <div>
-      <h1>Mi Portafolio</h1>
-      <img 
-        src={perfil} 
-        alt="Mi foto de perfil" 
-        style={{ width: '200px', borderRadius: '50%' }} 
-      />
+      <img src="/perfil.jpg" alt="Mi foto de perfil" />
     </div>
   );
 }
@@ -345,5 +340,4 @@ const HomePage = ({ onNavigate }) => {
   );
 };
 
-export default App;
 export default HomePage;
