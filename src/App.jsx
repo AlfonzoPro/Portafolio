@@ -1,5 +1,20 @@
 import React, { useState } from 'react';
 
+import perfil from './assets/perfil.jpg';
+
+function App() {
+  return (
+    <div>
+      <h1>Mi Portafolio</h1>
+      <img 
+        src={perfil} 
+        alt="Mi foto de perfil" 
+        style={{ width: '200px', borderRadius: '50%' }} 
+      />
+    </div>
+  );
+}
+
 // --- Datos ---
 const profileData = {
   name: "ALFONZO MAESTRE", 
@@ -330,4 +345,5 @@ const HomePage = ({ onNavigate }) => {
   );
 };
 
+export default App;
 export default HomePage;
