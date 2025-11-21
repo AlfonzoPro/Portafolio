@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import perfil from './assets/perfil.jpg';
+import perfil from './assets/fotoperfil.jpg';
 
 function App() {
   return (
