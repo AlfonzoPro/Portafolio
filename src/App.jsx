@@ -5,7 +5,7 @@ import perfil from './assets/perfil.jpg';
 function App() {
   return (
     <div>
-      <img src="/perfil.jpg" alt="Mi foto de perfil" />
+      <img src="/fotoperfil.jpg" alt="Mi foto de perfil" />
     </div>
   );
 }
