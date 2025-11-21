@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 
-import perfil from './assets/fotoperfil.jpg';
+// MODIFICACIÓN 1: Renombramos la variable de importación para que sea clara y la utilizamos.
+// VITE maneja la ruta de esta imagen por ti.
+import perfilFoto from './assets/fotoperfil.jpg';
 
-function App() {
-  return (
-    <div>
-      <img src="fotoperfil.jpg" alt="Profile Picture" class="profile-pic"/>
-    </div>
-  );
-}
+// La función 'App' que no se usaba ha sido eliminada.
 
 // --- Datos ---
 const profileData = {
   name: "ALFONZO MAESTRE", 
-  title: "SOY ESTUDIANTE DE INGENIERÍA DE SISTEMAS Y DESARROLLADOR WEB,  APASIONADO POR LA TECNOLOGÍA, LA PROGRAMACION Y EL APRENDIZAJE CONTINUO", 
+  title: "SOY ESTUDIANTE DE INGENIERÍA DE SISTEMAS Y DESARROLLADOR WEB, APASIONADO POR LA TECNOLOGÍA, LA PROGRAMACION Y EL APRENDIZAJE CONTINUO", 
   email: "ALFONZGABRIEL@GMAIL.COM",
   linkedin: "https://www.linkedin.com/in/alfonzo-maestre-73945436b/",
   github: "https://github.com/AlfonzoPro",
@@ -22,7 +18,7 @@ const profileData = {
   instagram: "https://www.instagram.com/alfonzo_998/",
   welcomeMessage: "BIENVENIDO A MI PORTAFOLIO COMO DESARROLLADOR WEB",
   contactMessage: "¿Interesado en trabajar juntos? Contáctame y hablemos sobre tu proyecto.",
-  image: "src/fotoperfil.jpg" 
+  // MODIFICACIÓN 2: Eliminamos la ruta hardcodeada incorrecta (image: "src/fotoperfil.jpg")
 };
 
 const skillsData = [
@@ -215,7 +211,8 @@ const HomePage = ({ onNavigate }) => {
             <div className="mx-auto md:mx-0 mb-6">
                 <img 
                 className="w-60 h-60 rounded-full object-cover border-4 border-cyan-400 shadow-xl shadow-cyan-400/50"
-                src={profileData.image} 
+                // MODIFICACIÓN 3: Usamos la variable importada
+                src={perfilFoto} 
                 alt="Foto de perfil de Alfonzo Maestre"
                 />
             </div>
