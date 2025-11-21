@@ -1,10 +1,95 @@
-import React, { useState } from 'react';
-
-// MODIFICACIÓN 1: Renombramos la variable de importación para que sea clara y la utilizamos.
-// VITE maneja la ruta de esta imagen por ti.
+import React, { useState, useEffect } from 'react';
 import perfilFoto from './assets/fotoperfil.jpg';
 
-// La función 'App' que no se usaba ha sido eliminada.
+// --- API de Dev.to ---
+const DEV_TO_API_URL = 'https://dev.to/api/articles?tag=react&per_page=6';
+
+// --- Componente para la sección de Blog ---
+const BlogSection = () => {
+    // 1. MANEJO DE ESTADOS
+    const [articles, setArticles] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // 2. FUNCIÓN PARA OBTENER DATOS DE LA API
+    useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                const response = await fetch(DEV_TO_API_URL);
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                const data = await response.json();
+                setArticles(data);
+                setError(null);
+            } catch (err) {
+                console.error("Fallo al obtener artículos:", err);
+                setError("Error al cargar los artículos. Por favor, inténtalo más tarde.");
+                setArticles([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchArticles();
+    }, []);
+
+    // 3. ESTADOS VISUALES (Carga y Error)
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-48 py-10" id="blog">
+                {/* Spinner simple de Tailwind */}
+                <div className="w-10 h-10 border-4 border-cyan-400 border-t-transparent border-solid rounded-full animate-spin"></div>
+                <p className="ml-3 text-cyan-400">Cargando artículos...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center p-8 bg-red-900/20 text-red-400 border border-red-400 rounded-lg my-10" id="blog">
+                <p className="font-bold">¡Ocurrió un error!</p>
+                <p>{error}</p>
+            </div>
+        );
+    }
+
+    // 4. VISTA DE DATOS (Si la carga fue exitosa)
+    return (
+        <section id="blog" className="pt-8 mb-10">
+            <h3 className="text-3xl font-bold text-gray-100 mb-6 border-b border-[#2D3440] pb-3">
+                Blog Técnico (React Dev.to)
+            </h3>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {articles.map((article) => (
+                    <a 
+                        key={article.id} 
+                        href={article.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block bg-[#0D121B] p-5 rounded-xl shadow-lg transition duration-300 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-400/20 border-t-4 border-cyan-400"
+                    >
+                        <h4 className="text-lg font-semibold text-gray-100 mb-2 line-clamp-2">
+                            {article.title}
+                        </h4>
+                        <p className="text-gray-400 text-sm mb-3 line-clamp-3">
+                            {article.description}
+                        </p>
+                        <div className="flex justify-between items-center text-xs text-gray-500">
+                            <span>{new Date(article.published_at).toLocaleDateString()}</span>
+                            <span className="text-sky-400">@{article.user.username}</span>
+                        </div>
+                    </a>
+                ))}
+            </div>
+            
+            {articles.length === 0 && !isLoading && (
+                <p className="text-center text-gray-400 mt-8">No se encontraron artículos.</p>
+            )}
+        </section>
+    );
+};
 
 // --- Datos ---
 const profileData = {
@@ -18,7 +103,7 @@ const profileData = {
   instagram: "https://www.instagram.com/alfonzo_998/",
   welcomeMessage: "BIENVENIDO A MI PORTAFOLIO COMO DESARROLLADOR WEB",
   contactMessage: "¿Interesado en trabajar juntos? Contáctame y hablemos sobre tu proyecto.",
-  // MODIFICACIÓN 2: Eliminamos la ruta hardcodeada incorrecta (image: "src/fotoperfil.jpg")
+  // Eliminamos la propiedad 'image: "src/fotoperfil.jpg"' ya que se usa la importación.
 };
 
 const skillsData = [
@@ -175,7 +260,7 @@ const ProjectCard = ({ title, desc, onDetailsClick }) => (
     onClick={onDetailsClick}
   >
     <h3 className="text-xl font-semibold text-gray-100 mb-2">{title}</h3>
-    <p className="text-gray-400 mb-4 text-sm">{desc}</p>
+    <p className="text-gray-400 mb-4 text-sm line-clamp-3">{desc}</p>
     <button className="text-sky-400 hover:text-cyan-400 font-medium flex items-center mt-2">
       Más detalle 
       <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -211,7 +296,7 @@ const HomePage = ({ onNavigate }) => {
             <div className="mx-auto md:mx-0 mb-6">
                 <img 
                 className="w-60 h-60 rounded-full object-cover border-4 border-cyan-400 shadow-xl shadow-cyan-400/50"
-                // MODIFICACIÓN 3: Usamos la variable importada
+                // Aquí usamos la variable importada:
                 src={perfilFoto} 
                 alt="Foto de perfil de Alfonzo Maestre"
                 />
@@ -221,7 +306,7 @@ const HomePage = ({ onNavigate }) => {
           
           {/* Navegación (Alineada a la izquierda) */}
           <nav className="space-y-6 text-left w-full mt-8">
-            {['SOBRE MÍ', 'SKILLS', 'PORTAFOLIO'].map((item) => (
+            {['SOBRE MÍ', 'SKILLS', 'PORTAFOLIO', 'BLOG'].map((item) => ( // ⬅️ BLOG AÑADIDO
               <a 
                 key={item} 
                 href={`#${item.toLowerCase().replace(/á/g, 'a').replace(/\s/g, '-')}`} 
@@ -294,7 +379,7 @@ const HomePage = ({ onNavigate }) => {
           </section>
           
           {/* Sección 3: Proyectos Destacados */}
-          <section id="portafolio">
+          <section id="portafolio" className="mb-10">
             <h3 className="text-3xl font-bold text-gray-100 mb-6 border-b border-[#2D3440] pb-3">Proyectos</h3>
             <div className="grid md:grid-cols-3 gap-8">
               {projectsData.map((project) => (
@@ -307,8 +392,11 @@ const HomePage = ({ onNavigate }) => {
               ))}
             </div>
           </section>
+          
+          {/* Sección 4: BLOG DINÁMICO (CONSUME API) */}
+          <BlogSection />
 
-          {/* Sección 4: Llamada a la acción */}
+          {/* Sección 5: Llamada a la acción */}
           <section className="pt-16 mt-16 text-center">
             <h3 className="text-2xl font-bold text-gray-100 mb-4">
               ¿Listo para empezar tu próximo proyecto?
